@@ -26,13 +26,13 @@ public class EnemyAI : MonoBehaviour
         while(enemeyState == EnemeyState.Roaming)
         {
             Vector2 roamPos = GetRoamingPosition();
-            Debug.Log(roamPos);
+            enemyPathFinding.MoveTo(roamPos);
             yield return new WaitForSeconds(2f);
         }
     }
 
     private Vector2 GetRoamingPosition()
     {
-        return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+        return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
     }
 }
