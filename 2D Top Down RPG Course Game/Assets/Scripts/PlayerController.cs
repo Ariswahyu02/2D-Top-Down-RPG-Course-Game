@@ -66,6 +66,8 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipX = true;
         }
         else 
+        {
             spriteRenderer.flipX = false;
+        }
     }
 }
