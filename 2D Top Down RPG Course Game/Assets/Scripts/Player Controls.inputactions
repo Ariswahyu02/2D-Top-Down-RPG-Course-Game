@@ -72,6 +72,34 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Combat",
+            "id": "0dd207c0-ab4d-4f87-bb00-a44c9e7a8283",
+            "actions": [
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "87d2e058-2e11-4e63-87bd-0e891e486494",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "577c4e8b-e87d-48df-b85f-79c4ed90699c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
