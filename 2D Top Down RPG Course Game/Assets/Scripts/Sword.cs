@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
+    [SerializeField] private GameObject slashAnimPrefab;
+    [SerializeField] private Transform slashAnimSpawnPoint;
+    private GameObject slashAnim;
     private PlayerControls playerControls;
     private PlayerController playerController;
     private ActiveWeapon activeWeapon;
@@ -32,6 +35,35 @@ public class Sword : MonoBehaviour
     private void Attack()
     {
         animator.SetTrigger("Attack");
+
+        slashAnim = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, Quaternion.identity);
+        slashAnim.transform.parent = this.transform.parent;
+    }
+
+    public void FlipUpSlashAnim()
+    {
+        slashAnim.gameObject.transform.rotation = Quaternion.Euler(-180, 0, 0);
+        if(playerController.IsFacingLeft)
+        {
+            slashAnim.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            slashAnim.GetComponent<SpriteRenderer>().flipX = false;
+        }
+    }
+
+    public void FlipDownSlashAnim()
+    {
+        slashAnim.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        if(playerController.IsFacingLeft)
+        {
+            slashAnim.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            slashAnim.GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     private void WeaponFacingToMouse()

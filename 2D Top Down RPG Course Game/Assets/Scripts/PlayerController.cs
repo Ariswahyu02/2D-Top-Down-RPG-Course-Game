@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 1f;
+    public bool IsFacingLeft { get { return isFacingLeft; } set { isFacingLeft = value; } }
+    private bool isFacingLeft;
     private Vector2 moveInput;
     private PlayerControls playerControls; // PlayerControls adalah class yang di generate sebelumnya jika namanya bukan player control maka berubah juga nama classnya
     private Rigidbody2D rb;
@@ -64,10 +66,12 @@ public class PlayerController : MonoBehaviour
         if(mousePos.x < playerScreenPoint.x)
         {
             spriteRenderer.flipX = true;
+            IsFacingLeft = true;
         }
         else 
         {
             spriteRenderer.flipX = false;
+            IsFacingLeft = false;
         }
     }
 }
