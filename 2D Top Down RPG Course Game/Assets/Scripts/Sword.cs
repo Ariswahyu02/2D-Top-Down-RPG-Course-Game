@@ -6,6 +6,7 @@ public class Sword : MonoBehaviour
 {
     [SerializeField] private GameObject slashAnimPrefab;
     [SerializeField] private Transform slashAnimSpawnPoint;
+    [SerializeField] private Transform weaponCollider;
     private GameObject slashAnim;
     private PlayerControls playerControls;
     private PlayerController playerController;
@@ -35,34 +36,32 @@ public class Sword : MonoBehaviour
     private void Attack()
     {
         animator.SetTrigger("Attack");
+        weaponCollider.gameObject.SetActive(true);
 
         slashAnim = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, Quaternion.identity);
         slashAnim.transform.parent = this.transform.parent;
     }
 
-    public void FlipUpSlashAnim()
+    public void OnDoneAttackingAnimEvent()
+    {
+        weaponCollider.gameObject.SetActive(false);
+    }
+
+    public void FlipUpSlashAnimEvent()
     {
         slashAnim.gameObject.transform.rotation = Quaternion.Euler(-180, 0, 0);
         if(playerController.IsFacingLeft)
         {
             slashAnim.GetComponent<SpriteRenderer>().flipX = true;
         }
-        else
-        {
-            slashAnim.GetComponent<SpriteRenderer>().flipX = false;
-        }
     }
 
-    public void FlipDownSlashAnim()
+    public void FlipDownSlashAnimEvent()
     {
         slashAnim.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
         if(playerController.IsFacingLeft)
         {
             slashAnim.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else
-        {
-            slashAnim.GetComponent<SpriteRenderer>().flipX = false;
         }
     }
 
@@ -79,10 +78,12 @@ public class Sword : MonoBehaviour
         if(mousePos.x < playerScreenPoint.x)
         {
             activeWeapon.transform.rotation = Quaternion.Euler(0, 180, angle);
+            weaponCollider.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
         else 
         {
             activeWeapon.transform.rotation = Quaternion.Euler(0, 0, angle);
+            weaponCollider.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }
