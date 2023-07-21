@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
     [SerializeField] private float speed = 1f;
     public bool IsFacingLeft { get { return isFacingLeft; } set { isFacingLeft = value; } }
     private bool isFacingLeft;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake() 
     {
+        Instance = this;
         // Inisialisasi player control
         playerControls = new PlayerControls();
         rb = GetComponent<Rigidbody2D>();

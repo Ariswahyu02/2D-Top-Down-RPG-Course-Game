@@ -5,7 +5,12 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private int startingHealth;
+    private KnockBack knockBack;
     private int currentHealth;
+
+    private void Awake() {
+        knockBack = GetComponent<KnockBack>();
+    }
 
     private void Start() 
     {
@@ -15,7 +20,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log(currentHealth);
+        knockBack.GetKnockBack(PlayerController.Instance.transform, 15f);
         EnemyDeath();
     }
 
