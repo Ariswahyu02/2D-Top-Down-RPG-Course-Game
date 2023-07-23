@@ -5,11 +5,13 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private int startingHealth;
+    private HitFlash hitFlash;
     private KnockBack knockBack;
     private int currentHealth;
 
     private void Awake() {
         knockBack = GetComponent<KnockBack>();
+        hitFlash = GetComponent<HitFlash>();
     }
 
     private void Start() 
@@ -21,6 +23,13 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damage;
         knockBack.GetKnockBack(PlayerController.Instance.transform, 15f);
+        StartCoroutine(hitFlash.FlashRoutine());
+        StartCoroutine(CheckDeathCoroutine());
+    }
+
+    private IEnumerator CheckDeathCoroutine()
+    {
+        yield return new WaitForSeconds(hitFlash.GetFlashTime());
         EnemyDeath();
     }
 
