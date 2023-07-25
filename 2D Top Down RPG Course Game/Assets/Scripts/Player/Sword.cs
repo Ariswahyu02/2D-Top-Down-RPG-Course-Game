@@ -12,6 +12,7 @@ public class Sword : MonoBehaviour
     private PlayerController playerController;
     private ActiveWeapon activeWeapon;
     private Animator animator;
+    private bool attackButtonDown, isAttacking = false;
 
     private void Awake() {
         playerController = GetComponentInParent<PlayerController>();
@@ -26,20 +27,43 @@ public class Sword : MonoBehaviour
 
     private void Start() {
         // action untuk klik kiri dan mengeksekusi attack saat klik kiri
-        playerControls.Combat.Attack.started += _ => Attack();
+        playerControls.Combat.Attack.started += _ => StartAttacking();
+        playerControls.Combat.Attack.canceled += _ => StopAttacking();
+
     }
 
     private void Update() {
         WeaponFacingToMouse();
+        Attack();
     }
 
     private void Attack()
     {
-        animator.SetTrigger("Attack");
-        weaponCollider.gameObject.SetActive(true);
+        if(attackButtonDown && !isAttacking)
+        {
+            isAttacking = true;
+            animator.SetTrigger("Attack");
+            weaponCollider.gameObject.SetActive(true);
 
-        slashAnim = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, Quaternion.identity);
-        slashAnim.transform.parent = this.transform.parent;
+            slashAnim = Instantiate(slashAnimPrefab, slashAnimSpawnPoint.position, Quaternion.identity);
+            slashAnim.transform.parent = this.transform.parent;
+            StartCoroutine(AttackCDRoutine());
+        }
+    }
+
+    private IEnumerator AttackCDRoutine()
+    {
+        yield return new WaitForSeconds(.5f);
+        isAttacking = false;
+    }
+    private void StartAttacking()
+    {
+        attackButtonDown = true;
+    }
+
+    private void StopAttacking()
+    {
+        attackButtonDown = false;
     }
 
     public void OnDoneAttackingAnimEvent()

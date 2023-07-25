@@ -6,7 +6,10 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
     [SerializeField] private float speed = 1f;
+    [SerializeField] private float dashSpeed = 4f;
+    [SerializeField] private TrailRenderer trailRenderer;
     public bool IsFacingLeft { get { return isFacingLeft; } set { isFacingLeft = value; } }
+    private bool isDashing = false;
     private bool isFacingLeft;
     private Vector2 moveInput;
     private PlayerControls playerControls; // PlayerControls adalah class yang di generate sebelumnya jika namanya bukan player control maka berubah juga nama classnya
@@ -22,6 +25,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start() 
+    {
+        playerControls.Combat.Dash.performed += _ => Dash();    
     }
 
     private void OnEnable() 
@@ -75,5 +83,28 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipX = false;
             IsFacingLeft = false;
         }
+    }
+
+    private void Dash()
+    {
+        if(!isDashing)
+        {
+            isDashing = true;
+            speed *= dashSpeed;
+            trailRenderer.emitting = true;
+            StartCoroutine(EndDashRoutine());
+        }
+    }
+
+    private IEnumerator EndDashRoutine()
+    {
+        // dash duration
+        yield return new WaitForSeconds(.2f);
+        speed /= dashSpeed;
+        trailRenderer.emitting = false;
+
+        // dash cooldown
+        yield return new WaitForSeconds(.3f);
+        isDashing = false;
     }
 }
