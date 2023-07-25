@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public bool IsFacingLeft { get { return isFacingLeft; } set { isFacingLeft = value; } }
     private bool isDashing = false;
     private bool isFacingLeft;
+    private float startingSpeed;
     private Vector2 moveInput;
     private PlayerControls playerControls; // PlayerControls adalah class yang di generate sebelumnya jika namanya bukan player control maka berubah juga nama classnya
     private Rigidbody2D rb;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private void Start() 
     {
         playerControls.Combat.Dash.performed += _ => Dash();    
+        startingSpeed = speed;
     }
 
     private void OnEnable() 
@@ -100,7 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         // dash duration
         yield return new WaitForSeconds(.2f);
-        speed /= dashSpeed;
+        speed = startingSpeed;
         trailRenderer.emitting = false;
 
         // dash cooldown
