@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
-    public static PlayerController Instance;
     [SerializeField] private float speed = 1f;
     [SerializeField] private float dashSpeed = 4f;
     [SerializeField] private TrailRenderer trailRenderer;
@@ -18,9 +17,9 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
-    private void Awake() 
+    protected override void Awake() 
     {
-        Instance = this;
+        base.Awake();
         // Inisialisasi player control
         playerControls = new PlayerControls();
         rb = GetComponent<Rigidbody2D>();
