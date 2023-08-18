@@ -7,6 +7,8 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float speed = 1f;
     [SerializeField] private float dashSpeed = 4f;
     [SerializeField] private TrailRenderer trailRenderer;
+    [SerializeField] private Transform weaponCollider;
+    [SerializeField] private Transform slashAnimPoint;
     public bool IsFacingLeft { get { return isFacingLeft; } set { isFacingLeft = value; } }
     private bool isDashing = false;
     private bool isFacingLeft;
@@ -48,6 +50,16 @@ public class PlayerController : Singleton<PlayerController>
     {
         PlayerDirectionFacingAdjustment();
         Move();
+    }
+
+    public Transform GetWeaponColliderTransform()
+    {
+        return weaponCollider;
+    }
+    
+    public Transform GetSlashAnimTransform()
+    {
+        return slashAnimPoint;
     }
 
     private void PlayerInput()

@@ -2,17 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bow : MonoBehaviour
+public class Bow : MonoBehaviour, IWeapon
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private WeaponInfo weaponInfo;
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private Transform arrowSpawnPoint;
+
+    private Animator animator;
+
+    readonly int FIRE_HASH = Animator.StringToHash("Fire");
+
+    private void Awake() 
     {
-        
+        animator = GetComponent<Animator>();    
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Attack()
     {
-        
+        animator.SetTrigger(FIRE_HASH);
+        GameObject newArrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, ActiveWeapon.Instance.transform.rotation);
+        newArrow.GetComponent<Projectile>().SetWeaponInfo(weaponInfo);
+    }
+
+    public WeaponInfo GetWeaponInfo()
+    {
+        return weaponInfo;
     }
 }

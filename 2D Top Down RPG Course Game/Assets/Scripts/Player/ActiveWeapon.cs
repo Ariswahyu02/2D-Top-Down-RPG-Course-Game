@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ActiveWeapon : Singleton<ActiveWeapon>
 {
-    [SerializeField] private MonoBehaviour currentActiveWeapon;
+    public MonoBehaviour CurrentActiveWeapon {get; private set;}
     private PlayerControls playerControls;
+    private float weaponCooldown;
     private bool attackButtonDown, isAttacking = false;
 
     protected override void Awake() {
@@ -22,12 +23,39 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
         playerControls.Combat.Attack.started += _ => StartAttacking();
         playerControls.Combat.Attack.canceled += _ => StopAttacking();
 
+        // Biar ga langsung nyerang waktu awal game
+        AttackCD();
     }
 
     private void Update() {
         Attack();
     }
 
+    public void NewWeapon(MonoBehaviour newWeapon)
+    {
+        CurrentActiveWeapon = newWeapon;
+        AttackCD();
+        weaponCooldown = (CurrentActiveWeapon as IWeapon).GetWeaponInfo().weaponCooldown; 
+    }
+
+    public void WeaponNull()
+    {
+        CurrentActiveWeapon = null;
+    }
+
+    private void AttackCD()
+    {
+        isAttacking = true;
+        StopAllCoroutines();
+        StartCoroutine(TimeBetweenAttacksRoutine());
+    }
+
+    private IEnumerator TimeBetweenAttacksRoutine()
+    {
+        yield return new WaitForSeconds(weaponCooldown);
+        isAttacking = false;
+    }
+    
     private void StartAttacking()
     {
         attackButtonDown = true;
@@ -45,10 +73,10 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
 
     private void Attack()
     {
-        if(attackButtonDown && !isAttacking)
+        if(attackButtonDown && !isAttacking && CurrentActiveWeapon)
         {
-            isAttacking = true;
-            (currentActiveWeapon as IWeapon).Attack();
+            AttackCD();
+            (CurrentActiveWeapon as IWeapon).Attack(); 
         }
     }
 }
